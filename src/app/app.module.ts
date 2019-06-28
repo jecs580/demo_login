@@ -14,8 +14,10 @@ import { PrivadoComponent } from './components/privado/privado.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegistroComponent } from './components/registro/registro.component';
-// Firebase
 
+import { AngularFireAuth } from '@angular/fire/auth';
+// Firebase
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,10 +31,12 @@ import { RegistroComponent } from './components/registro/registro.component';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
+    FormsModule,
     AngularFireAuthModule,
   ],
   providers: [
-    AuthService
+    AuthService,
+    AngularFireAuth
   ],
   bootstrap: [AppComponent]
 })
