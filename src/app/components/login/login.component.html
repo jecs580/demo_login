@@ -16,16 +16,17 @@
             <button type="submit"  class="btn btn-lg btn-danger my-4 btn-block">login</button>
 
             <div class="form-group">
-              <button class="btn btn-block btn-social btn-facebook" (click)="onLoginFacebook()">
-                <span class="fa fa-facebook"></span>
-                FACEBOOK
-              </button>
-              <button class="btn btn-block btn-social btn-google" (click)="onLoginGoogle()">
-                <span class="fa fa-google"></span>
-                GOOGLE
-              </button>
+            
             </div>
           </form>
+          <button class="btn btn-block btn-social btn-facebook" (click)="onLoginFacebook()">
+            <span class="fa fa-facebook"></span>
+            FACEBOOK
+          </button>
+          <button class="btn btn-block btn-social btn-google" (click)="onLoginGoogle()">
+            <span class="fa fa-google"></span>
+            GOOGLE
+          </button>
         </div>
       </div>
       <a class="btn btn-info my-1" [routerLink]="['/home']">Volver</a>

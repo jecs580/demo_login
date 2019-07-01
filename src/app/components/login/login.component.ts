@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
   }
   onLoginFacebook() {
     this.service.loginFacebook().then((res) => {
-      console.log(res.user.photoURL);
+      console.log(res);
     }).catch(
       err => console.log('error : ', err));
   }
@@ -33,6 +33,8 @@ export class LoginComponent implements OnInit {
     // console.log('password : ', this.password);
     this.service.loginEmail(this.email, this.password).then((res) => {
       console.log(res);
+      // this.router.navigate(['privado']);
+      console.log('ESTO ES EL ISauth', this.service.isAuth());
     }).catch(
       err => console.log('error : ', err)
     );
