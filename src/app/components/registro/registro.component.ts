@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { Router } from '@angular/router';
 import { AuthService } from './../../services/auth.service';
 import { UserInterface } from './../../models/users';
@@ -16,26 +17,33 @@ export class RegistroComponent implements OnInit {
     name: '',
     last: '',
     email: '',
-    password: '',
     photoURL: ''
   };
+  public password = '';
   constructor(private service: AuthService, private route: Router) { }
 
   ngOnInit() {
   }
   register() {
     console.log(this.user);
-    this.service.registroUser(this.user.email, this.user.password).then(
+    this.service.registroUser(this.user.email, this.password).then(
       (res) => {
+        // console.log('ESTO ES EL RES:');
         // this.route.navigate(['privado']);
        this.service.isAuth().subscribe(
           b => {
              this.user.id = b.uid;
-            //  this.user.name = b.displayName;
+             console.log('******************', this.user);
+             this.service.addUser(this.user).then(
+               () => {
+                this.service.logout();
+                console.log('Se añadio a la base de datos y se cerro sesion');
+               }
+             ).catch(err => console.error('Error en adicion', err));
           }
         );
       }
-    ).catch(err => console.log('ERROR', err));
-    console.log(this.user);
+    ).catch(err => console.log('ERROR EN EL COMPONENTE REGISTRO', err));
+    // console.log(this.user);
   }
 }

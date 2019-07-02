@@ -11,13 +11,16 @@ import { UserInterface } from '../models/users';
 export class AuthService {
   private userCollection: AngularFirestoreCollection<UserInterface>;
   private users: Observable<UserInterface[]>;
-
+  public domine = {
+    url:  'http://localhost:4200/home'
+  };
   constructor(private Afauth: AngularFireAuth, private afs: AngularFirestore) {
     this.userCollection = this.afs.collection<UserInterface>('users');
     this.users = this.userCollection.valueChanges();
   }
 
-  addUser() {
+  addUser(user: UserInterface) {
+    return this.userCollection.doc(user.id).set(user);
   }
   loginGoogle() {
     return this.Afauth.auth.signInWithPopup(new auth.GoogleAuthProvider());
@@ -28,7 +31,13 @@ export class AuthService {
   registroUser(email: string, password: string) {
     return new Promise((resolve, recect) => {
       this.Afauth.auth.createUserWithEmailAndPassword(email, password)
-        .then(userdata => resolve(userdata),
+        .then(userdata => {
+          resolve(userdata);
+          userdata.user.sendEmailVerification(this.domine).catch(
+            err => console.log('ERROR EN LA VERIFICACION', err)
+          );
+          // this.logout();
+        },
           err => recect(err)
         );
     });

@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   onLoginGoogle() {
     this.service.loginGoogle().then((res) => {
       // this.router.navigate(['privado']):
-      console.log(res);
+      console.log(res.user.uid);
     }).catch(
       err => console.log('error', err));
   }
