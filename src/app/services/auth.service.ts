@@ -12,7 +12,7 @@ export class AuthService {
   private userCollection: AngularFirestoreCollection<UserInterface>;
   private users: Observable<UserInterface[]>;
   public domine = {
-    url:  'http://localhost:4200/home'
+    url: 'http://localhost:4200/home'
   };
   constructor(private Afauth: AngularFireAuth, private afs: AngularFirestore) {
     this.userCollection = this.afs.collection<UserInterface>('users');
@@ -51,7 +51,20 @@ export class AuthService {
     return this.Afauth.authState.pipe(map(auth => auth));
   }
   loginEmail(email: string, password: string) {
-    return this.Afauth.auth.signInWithEmailAndPassword(email, password);
+    // return this.Afauth.auth.signInWithEmailAndPassword(email, password);
+    return new Promise((resolve, recect) => {
+      this.Afauth.auth.signInWithEmailAndPassword(email, password)
+        .then(userdata => {
+          resolve(userdata);
+          if (!userdata.user.emailVerified) {
+            console.log('debe verificar su correo');
+            this.logout();
+          }
+          console.log('paso directo');
+        },
+          err => recect(err)
+        );
+    });
   }
   logout() {
     return this.Afauth.auth.signOut();
