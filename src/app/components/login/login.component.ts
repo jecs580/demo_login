@@ -38,5 +38,7 @@ export class LoginComponent implements OnInit {
     }).catch(
       err => console.log('error : ', err)
     );
+    console.log('IMPRIMENDO UN USER');
+    this.service.oneUsers();
   }
 }

@@ -11,6 +11,8 @@ import { UserInterface } from '../models/users';
 export class AuthService {
   private userCollection: AngularFirestoreCollection<UserInterface>;
   private users: Observable<UserInterface[]>;
+  private userCollection1: AngularFirestoreCollection<UserInterface>;
+  private users1: Observable<UserInterface[]>;
   public domine = {
     url: 'http://localhost:4200/home'
   };
@@ -21,6 +23,17 @@ export class AuthService {
 
   addUser(user: UserInterface) {
     return this.userCollection.doc(user.id).set(user);
+  }
+  oneUsers() {
+    // this.afs.collection('users').snapshotChanges(query => {
+    //   if (query.empety) {
+    //   }
+    // }
+    //   );
+    this.userCollection1 = this.afs.collection<UserInterface>('users', ref => ref.orderBy('name'));
+     this.userCollection1.valueChanges().subscribe(data => {
+      console.log('---DATA--', data);
+    });
   }
   loginGoogle() {
     return this.Afauth.auth.signInWithPopup(new auth.GoogleAuthProvider());
@@ -42,11 +55,8 @@ export class AuthService {
         );
     });
   }
-  // getAuth() {
-  //   return this.Afauth.authState.pipe(map(auth => auth));
-  // //devuelve los datos del usuario q este logeado
-  // }
   isAuth() {
+    // devuelve los datos del usuario q este logeado
     // tslint:disable-next-line:no-shadowed-variable
     return this.Afauth.authState.pipe(map(auth => auth));
   }
