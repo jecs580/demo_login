@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { map } from 'rxjs/operators';
 import { auth } from 'firebase/app';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { UserInterface } from '../models/users';
 @Injectable({
@@ -13,6 +13,8 @@ export class AuthService {
   private users: Observable<UserInterface[]>;
   private userCollection1: AngularFirestoreCollection<UserInterface>;
   private users1: Observable<UserInterface[]>;
+  private userDoc: AngularFirestoreDocument<UserInterface>;
+  private user: Observable<UserInterface>;
   public domine = {
     url: 'http://localhost:4200/home'
   };
@@ -24,16 +26,20 @@ export class AuthService {
   addUser(user: UserInterface) {
     return this.userCollection.doc(user.id).set(user);
   }
-  oneUsers() {
-    // this.afs.collection('users').snapshotChanges(query => {
-    //   if (query.empety) {
-    //   }
-    // }
-    //   );
-    this.userCollection1 = this.afs.collection<UserInterface>('users', ref => ref.orderBy('name'));
-     this.userCollection1.valueChanges().subscribe(data => {
-      console.log('---DATA--', data);
-    });
+  oneUsers(uid: string) {
+    this.userDoc = this.afs.doc<UserInterface>(`users/${uid}`);
+    return this.user = this.userDoc.snapshotChanges().pipe(map(action => {
+      if (action.payload.exists === false) {
+        return null;
+      } else {
+        const data = action.payload.data() as UserInterface;
+        return data;
+      }
+    }));
+    //   this.userCollection1 = this.afs.collection<UserInterface>('users', ref => ref.orderBy('name'));
+    // this.userCollection1.valueChanges().subscribe(data => {
+    //   console.log('---DATA--', data);
+    // });
   }
   loginGoogle() {
     return this.Afauth.auth.signInWithPopup(new auth.GoogleAuthProvider());
